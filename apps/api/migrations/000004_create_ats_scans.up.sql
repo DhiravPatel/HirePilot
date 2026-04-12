@@ -1,0 +1,21 @@
+CREATE TABLE ats_scans (
+  id                TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  user_id           TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  resume_id         TEXT REFERENCES resumes(id) ON DELETE SET NULL,
+  job_title         TEXT,
+  job_description   TEXT,
+  overall_score     INT NOT NULL,
+  formatting_score  INT NOT NULL,
+  keywords_score    INT NOT NULL,
+  experience_score  INT NOT NULL,
+  education_score   INT NOT NULL,
+  skills_score      INT NOT NULL,
+  readability_score INT NOT NULL,
+  strengths         TEXT[] NOT NULL DEFAULT '{}',
+  weaknesses        TEXT[] NOT NULL DEFAULT '{}',
+  suggestions       TEXT[] NOT NULL DEFAULT '{}',
+  missing_keywords  TEXT[] NOT NULL DEFAULT '{}',
+  matched_keywords  TEXT[] NOT NULL DEFAULT '{}',
+  raw_feedback      TEXT NOT NULL,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

@@ -1,0 +1,7 @@
+{
+  "name": "@hirepilot/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./eslint.js",
+  "files": ["eslint.js"]
+}
