@@ -1,16 +1,21 @@
 {
   "name": "hirepilot",
   "private": true,
-  "workspaces": ["apps/web", "packages/*"],
+  "workspaces": [
+    "apps/web",
+    "packages/*"
+  ],
   "scripts": {
+    "start": "concurrently --names \"API,WEB\" --prefix-colors \"cyan,magenta\" \"cd apps/api && go run ./cmd/server\" \"cd apps/web && npm run dev\"",
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
+    "concurrently": "^8.2.2",
     "turbo": "^2.0.0",
-    "typescript": "^5.4.0",
-    "@types/node": "^20.0.0"
+    "typescript": "^5.4.0"
   }
 }

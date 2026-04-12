@@ -9,32 +9,16 @@ import {
   Sparkles,
   User,
   Target,
-  Mail,
   ChevronRight,
   ChevronLeft,
   X,
   Plus,
   Loader2,
 } from "lucide-react";
-import type { EmailTone, EmailStyle } from "@/types";
 
 const STEPS = [
   { icon: User, label: "Basic Info" },
   { icon: Target, label: "Career Goals" },
-  { icon: Mail, label: "Email Preferences" },
-];
-
-const TONES: { value: EmailTone; label: string; description: string }[] = [
-  { value: "PROFESSIONAL", label: "Professional", description: "Formal yet warm" },
-  { value: "FRIENDLY", label: "Friendly", description: "Casual and approachable" },
-  { value: "BOLD", label: "Bold", description: "Direct and confident" },
-  { value: "HUMBLE", label: "Humble", description: "Grateful and eager" },
-];
-
-const STYLES: { value: EmailStyle; label: string; description: string }[] = [
-  { value: "CONCISE", label: "Concise", description: "3-4 sentences, to the point" },
-  { value: "DETAILED", label: "Detailed", description: "Full 2 paragraph body" },
-  { value: "STORYTELLING", label: "Storytelling", description: "Opens with a narrative hook" },
 ];
 
 export default function OnboardingPage() {
@@ -56,9 +40,6 @@ export default function OnboardingPage() {
     linkedin_url: "",
     github_url: "",
     portfolio_url: "",
-    email_tone: "professional" as EmailTone,
-    email_style: "concise" as EmailStyle,
-    bio: "",
   });
 
   const updateField = (field: string, value: unknown) => {
@@ -310,68 +291,6 @@ export default function OnboardingPage() {
                   className="w-full px-3 py-2.5 bg-bg-elevated border border-border rounded-lg text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm"
                 />
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Email Preferences */}
-        {step === 2 && (
-          <div className="space-y-6 animate-fade-in">
-            <div>
-              <label className="block text-sm font-medium mb-3">Email Tone</label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {TONES.map((tone) => (
-                  <button
-                    key={tone.value}
-                    type="button"
-                    onClick={() => updateField("email_tone", tone.value)}
-                    className={`p-3 rounded-lg border text-left transition-all ${
-                      formData.email_tone === tone.value
-                        ? "border-brand-primary bg-brand-primary/10"
-                        : "border-border bg-bg-elevated hover:border-border/80"
-                    }`}
-                  >
-                    <p className="text-sm font-medium">{tone.label}</p>
-                    <p className="text-xs text-text-secondary mt-0.5">{tone.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-3">Email Style</label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {STYLES.map((style) => (
-                  <button
-                    key={style.value}
-                    type="button"
-                    onClick={() => updateField("email_style", style.value)}
-                    className={`p-3 rounded-lg border text-left transition-all ${
-                      formData.email_style === style.value
-                        ? "border-brand-primary bg-brand-primary/10"
-                        : "border-border bg-bg-elevated hover:border-border/80"
-                    }`}
-                  >
-                    <p className="text-sm font-medium">{style.label}</p>
-                    <p className="text-xs text-text-secondary mt-0.5">{style.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1.5">
-                Bio ({formData.bio.length}/300)
-              </label>
-              <textarea
-                value={formData.bio}
-                onChange={(e) => {
-                  if (e.target.value.length <= 300) {
-                    updateField("bio", e.target.value);
-                  }
-                }}
-                rows={4}
-                placeholder="Tell us a bit about yourself and your career journey..."
-                className="w-full px-3 py-2.5 bg-bg-elevated border border-border rounded-lg text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent text-sm resize-none"
-              />
             </div>
           </div>
         )}

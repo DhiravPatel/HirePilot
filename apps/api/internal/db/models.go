@@ -42,28 +42,6 @@ type Resume struct {
 	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
-type AtsScan struct {
-	ID               string    `json:"id"`
-	UserID           string    `json:"userId"`
-	ResumeID         *string   `json:"resumeId"`
-	JobTitle         *string   `json:"jobTitle"`
-	JobDescription   *string   `json:"jobDescription"`
-	OverallScore     int32     `json:"overallScore"`
-	FormattingScore  int32     `json:"formattingScore"`
-	KeywordsScore    int32     `json:"keywordsScore"`
-	ExperienceScore  int32     `json:"experienceScore"`
-	EducationScore   int32     `json:"educationScore"`
-	SkillsScore      int32     `json:"skillsScore"`
-	ReadabilityScore int32     `json:"readabilityScore"`
-	Strengths        []string  `json:"strengths"`
-	Weaknesses       []string  `json:"weaknesses"`
-	Suggestions      []string  `json:"suggestions"`
-	MissingKeywords  []string  `json:"missingKeywords"`
-	MatchedKeywords  []string  `json:"matchedKeywords"`
-	RawFeedback      string    `json:"rawFeedback"`
-	CreatedAt        time.Time `json:"createdAt"`
-}
-
 type ColdEmail struct {
 	ID             string    `json:"id"`
 	UserID         string    `json:"userId"`
@@ -81,36 +59,4 @@ type ColdEmail struct {
 	IsSaved        bool      `json:"isSaved"`
 	Label          *string   `json:"label"`
 	CreatedAt      time.Time `json:"createdAt"`
-}
-
-type JobApplication struct {
-	ID          string     `json:"id"`
-	UserID      string     `json:"userId"`
-	CompanyName string     `json:"companyName"`
-	JobTitle    string     `json:"jobTitle"`
-	JobURL      *string    `json:"jobUrl"`
-	Status      string     `json:"status"`
-	AppliedAt   *time.Time `json:"appliedAt"`
-	Notes       *string    `json:"notes"`
-	SalaryMin   *int32     `json:"salaryMin"`
-	SalaryMax   *int32     `json:"salaryMax"`
-	Location    *string    `json:"location"`
-	IsRemote    bool       `json:"isRemote"`
-	CreatedAt   time.Time  `json:"createdAt"`
-	UpdatedAt   time.Time  `json:"updatedAt"`
-}
-
-type SavedJob struct {
-	ID          string    `json:"id"`
-	UserID      string    `json:"userId"`
-	Title       string    `json:"title"`
-	Company     string    `json:"company"`
-	URL         *string   `json:"url"`
-	Description *string   `json:"description"`
-	SavedAt     time.Time `json:"savedAt"`
-}
-
-type StatusCount struct {
-	Status string `json:"status"`
-	Count  int32  `json:"count"`
 }

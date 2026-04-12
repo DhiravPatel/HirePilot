@@ -23,10 +23,7 @@ func NewColdEmailHandler(queries *db.Queries, emailService *service.ColdEmailSer
 }
 
 type generateEmailRequest struct {
-	JobPosting     string `json:"jobPosting"`
-	RecruiterName  string `json:"recruiterName"`
-	RecruiterEmail string `json:"recruiterEmail"`
-	CompanyName    string `json:"companyName"`
+	JobPosting string `json:"jobPosting"`
 }
 
 func (h *ColdEmailHandler) Generate(w http.ResponseWriter, r *http.Request) {
@@ -43,25 +40,16 @@ func (h *ColdEmailHandler) Generate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := h.emailService.Generate(r.Context(), user, req.JobPosting, req.RecruiterName, req.RecruiterEmail, req.CompanyName)
+	result, err := h.emailService.Generate(r.Context(), user, req.JobPosting, "", "", "")
 	if err != nil {
 		respond.Error(w, http.StatusInternalServerError, "email generation failed")
 		return
 	}
 
 	var recruiterName *string
-	if req.RecruiterName != "" {
-		recruiterName = &req.RecruiterName
-	}
 	var recruiterEmail *string
-	if req.RecruiterEmail != "" {
-		recruiterEmail = &req.RecruiterEmail
-	}
 
 	companyName := &result.ExtractedInfo.CompanyName
-	if req.CompanyName != "" {
-		companyName = &req.CompanyName
-	}
 	jobTitle := &result.ExtractedInfo.JobTitle
 
 	var followUp1 *string

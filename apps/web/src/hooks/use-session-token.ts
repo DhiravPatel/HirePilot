@@ -6,7 +6,7 @@ export function useSessionToken() {
   const { data: session, status } = useSession();
 
   return {
-    token: session?.accessToken ?? null,
+    token: (session as { accessToken?: string })?.accessToken ?? null,
     email: session?.user?.email ?? null,
     user: session?.user ?? null,
     status,

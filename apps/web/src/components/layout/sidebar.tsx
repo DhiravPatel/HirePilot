@@ -7,11 +7,8 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import {
   LayoutDashboard,
-  FileSearch,
   FileText,
   Mail,
-  Key,
-  Briefcase,
   UserCircle,
   LogOut,
   Sparkles,
@@ -22,11 +19,8 @@ import {
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/scanner", label: "Resume Scanner", icon: FileSearch },
   { href: "/resumes", label: "My Resumes", icon: FileText },
   { href: "/cold-email", label: "Cold Email", icon: Mail },
-  { href: "/keywords", label: "Keywords", icon: Key },
-  { href: "/tracker", label: "Job Tracker", icon: Briefcase },
   { href: "/profile", label: "Profile", icon: UserCircle },
 ];
 

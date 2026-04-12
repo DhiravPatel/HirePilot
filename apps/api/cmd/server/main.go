@@ -45,9 +45,7 @@ func main() {
 	storageClient := appwritepkg.NewClient(cfg.AppwriteEndpoint, cfg.AppwriteProject, cfg.AppwriteAPIKey, cfg.AppwriteBucket)
 
 	// Init services
-	atsService := service.NewATSService(groqClient)
 	emailService := service.NewColdEmailService(groqClient)
-	keywordService := service.NewKeywordService(groqClient)
 
 	// Router
 	r := chi.NewRouter()
@@ -76,10 +74,7 @@ func main() {
 	authHandler := handler.NewAuthHandler(queries, cfg)
 	userHandler := handler.NewUserHandler(queries)
 	resumeHandler := handler.NewResumeHandler(queries, storageClient)
-	atsHandler := handler.NewAtsHandler(queries, atsService, storageClient)
 	emailHandler := handler.NewColdEmailHandler(queries, emailService)
-	keywordHandler := handler.NewKeywordHandler(keywordService)
-	trackerHandler := handler.NewTrackerHandler(queries)
 	dashboardHandler := handler.NewDashboardHandler(queries)
 
 	// Auth middleware
@@ -104,25 +99,11 @@ func main() {
 			r.Delete("/resumes/{id}", resumeHandler.Delete)
 			r.Put("/resumes/{id}/default", resumeHandler.SetDefault)
 
-			r.Post("/ats/scan", atsHandler.Scan)
-			r.Get("/ats/scans", atsHandler.List)
-			r.Get("/ats/scans/{id}", atsHandler.Get)
-			r.Delete("/ats/scans/{id}", atsHandler.Delete)
-
 			r.Post("/cold-email/generate", emailHandler.Generate)
 			r.Get("/cold-email", emailHandler.List)
 			r.Get("/cold-email/{id}", emailHandler.Get)
 			r.Put("/cold-email/{id}", emailHandler.Update)
 			r.Delete("/cold-email/{id}", emailHandler.Delete)
-
-			r.Post("/keywords/optimize", keywordHandler.Optimize)
-			r.Post("/keywords/check", keywordHandler.Check)
-
-			r.Get("/tracker", trackerHandler.List)
-			r.Post("/tracker", trackerHandler.Create)
-			r.Put("/tracker/{id}", trackerHandler.Update)
-			r.Delete("/tracker/{id}", trackerHandler.Delete)
-			r.Put("/tracker/{id}/status", trackerHandler.UpdateStatus)
 
 			r.Get("/dashboard/stats", dashboardHandler.Stats)
 			r.Get("/dashboard/activity", dashboardHandler.Activity)

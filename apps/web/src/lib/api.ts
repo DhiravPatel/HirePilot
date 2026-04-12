@@ -1,13 +1,9 @@
 import type {
   User,
   Resume,
-  AtsScan,
   ColdEmail,
-  JobApplication,
   DashboardStats,
   DashboardActivity,
-  KeywordResult,
-  KeywordCheckResult,
   ApiError,
 } from "@/types";
 
@@ -134,149 +130,13 @@ export async function setDefaultResume(id: string, token: string) {
   return request<Resume>("PUT", `/api/v1/resumes/${id}/default`, token);
 }
 
-// ─── ATS Scanner ───────────────────────────────────────────────────────────
-
-export async function scanAts(
-  data: {
-    resumeId?: string;
-    resumeText?: string;
-    jobTitle?: string;
-    jobDescription?: string;
-  },
-  token: string,
-) {
-  return request<AtsScan>("POST", "/api/v1/ats/scan", token, data);
-}
-
-export async function listAtsScans(token: string, limit = 20, offset = 0) {
-  return request<AtsScan[]>(
-    "GET",
-    `/api/v1/ats/scans?limit=${limit}&offset=${offset}`,
-    token,
-  );
-}
-
-export async function getAtsScan(id: string, token: string) {
-  return request<AtsScan>("GET", `/api/v1/ats/scans/${id}`, token);
-}
-
-export async function deleteAtsScan(id: string, token: string) {
-  return request<void>("DELETE", `/api/v1/ats/scans/${id}`, token);
-}
-
 // ─── Cold Email ────────────────────────────────────────────────────────────
 
 export async function generateColdEmail(
-  data: {
-    jobPosting: string;
-    recruiterName?: string;
-    recruiterEmail?: string;
-    companyName?: string;
-  },
+  data: { jobPosting: string },
   token: string,
 ) {
   return request<ColdEmail>("POST", "/api/v1/cold-email/generate", token, data);
-}
-
-export async function listColdEmails(token: string, limit = 20, offset = 0) {
-  return request<ColdEmail[]>(
-    "GET",
-    `/api/v1/cold-email?limit=${limit}&offset=${offset}`,
-    token,
-  );
-}
-
-export async function getColdEmail(id: string, token: string) {
-  return request<ColdEmail>("GET", `/api/v1/cold-email/${id}`, token);
-}
-
-export async function updateColdEmail(
-  id: string,
-  data: { subject?: string; body?: string; isSaved?: boolean; label?: string },
-  token: string,
-) {
-  return request<ColdEmail>("PUT", `/api/v1/cold-email/${id}`, token, data);
-}
-
-export async function deleteColdEmail(id: string, token: string) {
-  return request<void>("DELETE", `/api/v1/cold-email/${id}`, token);
-}
-
-// ─── Keywords ──────────────────────────────────────────────────────────────
-
-export async function optimizeKeywords(
-  data: { targetRole: string; industry?: string; experienceLevel?: string },
-  token: string,
-) {
-  return request<KeywordResult>(
-    "POST",
-    "/api/v1/keywords/optimize",
-    token,
-    data,
-  );
-}
-
-export async function checkKeywords(
-  data: { resumeText: string; targetKeywords: string[] },
-  token: string,
-) {
-  return request<KeywordCheckResult>(
-    "POST",
-    "/api/v1/keywords/check",
-    token,
-    data,
-  );
-}
-
-// ─── Job Applications (Tracker) ────────────────────────────────────────────
-
-export async function listApplications(token: string, limit = 50, offset = 0) {
-  return request<JobApplication[]>(
-    "GET",
-    `/api/v1/tracker?limit=${limit}&offset=${offset}`,
-    token,
-  );
-}
-
-export async function createApplication(
-  data: {
-    companyName: string;
-    jobTitle: string;
-    jobUrl?: string;
-    notes?: string;
-    salaryMin?: number;
-    salaryMax?: number;
-    location?: string;
-    isRemote?: boolean;
-  },
-  token: string,
-) {
-  return request<JobApplication>("POST", "/api/v1/tracker", token, data);
-}
-
-export async function updateApplication(
-  id: string,
-  data: Partial<JobApplication>,
-  token: string,
-) {
-  return request<JobApplication>("PUT", `/api/v1/tracker/${id}`, token, data);
-}
-
-export async function deleteApplication(id: string, token: string) {
-  return request<void>("DELETE", `/api/v1/tracker/${id}`, token);
-}
-
-export async function updateApplicationStatus(
-  id: string,
-  status: string,
-  token: string,
-) {
-  return request<JobApplication>(
-    "PUT",
-    `/api/v1/tracker/${id}/status`,
-    token,
-    { status },
-  );
 }
 
 // ─── Dashboard ─────────────────────────────────────────────────────────────
