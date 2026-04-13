@@ -31,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/signin",
   },
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile, user }) {
       if (account && profile) {
         if (profile.email) {
           token.email = profile.email;
@@ -39,11 +39,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (profile.sub) {
           token.sub = profile.sub;
         }
+        if (profile.name) {
+          token.name = profile.name;
+        }
+        if ((profile as { picture?: string }).picture) {
+          token.picture = (profile as { picture?: string }).picture;
+        }
       }
+      if (user?.name) token.name = user.name;
+      if (user?.image) token.picture = user.image;
 
       // Generate a simple HMAC-signed JWT for the Go API
       if (token.email) {
-        const apiToken = await new SignJWT({ email: token.email })
+        const apiToken = await new SignJWT({
+          email: token.email,
+          name: token.name,
+          picture: token.picture,
+        })
           .setProtectedHeader({ alg: "HS256" })
           .setIssuedAt()
           .setExpirationTime("24h")

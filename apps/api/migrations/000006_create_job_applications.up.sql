@@ -1,4 +1,4 @@
-CREATE TABLE job_applications (
+CREATE TABLE IF NOT EXISTS job_applications (
   id           TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   user_id      TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   company_name TEXT NOT NULL,
@@ -15,6 +15,7 @@ CREATE TABLE job_applications (
   updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS job_applications_updated_at ON job_applications;
 CREATE TRIGGER job_applications_updated_at
   BEFORE UPDATE ON job_applications
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();

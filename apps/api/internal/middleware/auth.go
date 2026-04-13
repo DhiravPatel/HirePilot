@@ -2,10 +2,12 @@ package middleware
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/yourusername/hirepilot/api/internal/db"
 )
 
@@ -57,8 +59,30 @@ func (m *AuthMiddleware) Authenticate(next http.Handler) http.Handler {
 
 		user, err := m.queries.GetUserByEmail(r.Context(), email)
 		if err != nil {
-			http.Error(w, `{"error":"user not found"}`, http.StatusUnauthorized)
-			return
+			// Auto-create user from verified JWT claims. The JWT was signed with
+			// NEXTAUTH_SECRET so we trust the email is real.
+			var namePtr *string
+			if name, ok := claims["name"].(string); ok && name != "" {
+				namePtr = &name
+			}
+			var imagePtr *string
+			if image, ok := claims["picture"].(string); ok && image != "" {
+				imagePtr = &image
+			}
+
+			user, err = m.queries.CreateUser(r.Context(), db.CreateUserParams{
+				ID:       uuid.New().String(),
+				Email:    email,
+				Name:     namePtr,
+				Image:    imagePtr,
+				GoogleID: nil,
+			})
+			if err != nil {
+				log.Printf("auth: failed to create user %s: %v", email, err)
+				http.Error(w, `{"error":"failed to create user"}`, http.StatusInternalServerError)
+				return
+			}
+			log.Printf("auth: auto-created user %s", email)
 		}
 
 		ctx := context.WithValue(r.Context(), UserContextKey, user)

@@ -13,6 +13,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/yourusername/hirepilot/api/internal/config"
@@ -27,8 +28,15 @@ import (
 func main() {
 	cfg := config.Load()
 
-	// Database connection pool
-	pool, err := pgxpool.New(context.Background(), cfg.DatabaseURL)
+	// Database connection pool. Use simple protocol (no prepared statements)
+	// for compatibility with Supabase's transaction pooler (pgbouncer).
+	poolCfg, err := pgxpool.ParseConfig(cfg.DatabaseURL)
+	if err != nil {
+		log.Fatalf("db: invalid DATABASE_URL: %v", err)
+	}
+	poolCfg.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+
+	pool, err := pgxpool.NewWithConfig(context.Background(), poolCfg)
 	if err != nil {
 		log.Fatalf("db: unable to connect: %v", err)
 	}
@@ -38,6 +46,11 @@ func main() {
 		log.Fatalf("db: ping failed: %v", err)
 	}
 	log.Println("db: connected")
+
+	// Run migrations automatically on startup
+	if err := db.RunMigrations(context.Background(), pool, "migrations"); err != nil {
+		log.Fatalf("db: migration failed: %v", err)
+	}
 
 	// Init clients
 	queries := db.New(pool)

@@ -1,4 +1,4 @@
-CREATE TABLE cold_emails (
+CREATE TABLE IF NOT EXISTS cold_emails (
   id              TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   user_id         TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   job_posting     TEXT NOT NULL,

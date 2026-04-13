@@ -1,4 +1,4 @@
-CREATE TABLE ats_scans (
+CREATE TABLE IF NOT EXISTS ats_scans (
   id                TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   user_id           TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   resume_id         TEXT REFERENCES resumes(id) ON DELETE SET NULL,
